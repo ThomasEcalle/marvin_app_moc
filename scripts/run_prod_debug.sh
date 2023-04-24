@@ -1,1 +1,1 @@
-flutter run --flavor prod
+flutter run --flavor prod --dart-define=API_BASE_URL=https://prod.example.com

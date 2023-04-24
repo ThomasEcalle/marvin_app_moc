@@ -1,1 +1,1 @@
-flutter run --flavor dev
+flutter run --flavor dev --dart-define=API_BASE_URL=https://dev.example.com

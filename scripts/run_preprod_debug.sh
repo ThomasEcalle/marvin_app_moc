@@ -1,1 +1,1 @@
-flutter run --flavor preprod
+flutter run --flavor preprod --dart-define=API_BASE_URL=https://preprod.example.com

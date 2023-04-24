@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 void main() {
+  const apiBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'coucou');
+
+  debugPrint('API_BASE_URL: $apiBaseUrl');
   runApp(const MyApp());
 }
 
