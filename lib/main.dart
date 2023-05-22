@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marvin_app_moc/home_screen/data_sources/remote_fruits_data_source.dart';
 import 'package:marvin_app_moc/home_screen/fruits_repository_provider.dart';
 import 'package:marvin_app_moc/home_screen/home_screen.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: HomeScreen(),
+        home: const HomeScreen(),
       ),
     );
   }
