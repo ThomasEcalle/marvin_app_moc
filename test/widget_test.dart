@@ -6,25 +6,78 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:marvin_app_moc/home_screen/cart_bloc/cart_bloc.dart';
+import 'package:marvin_app_moc/home_screen/data_sources/products_data_source.dart';
+import 'package:marvin_app_moc/home_screen/home_screen.dart';
+import 'package:marvin_app_moc/home_screen/models/product.dart';
+import 'package:marvin_app_moc/home_screen/repository/products_repository.dart';
 
-import 'package:marvin_app_moc/main.dart';
+class EmptyRemoteDataSource extends ProductsDataSource {
+  @override
+  Future<List<Product>> getProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return [];
+  }
+}
+
+class FailingRemoteDataSource extends ProductsDataSource {
+  @override
+  Future<List<Product>> getProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Error');
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Products Screen with succee', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      RepositoryProvider(
+        create: (context) => ProductsRepository(
+          remoteDataSource: EmptyRemoteDataSource(),
+        ),
+        child: BlocProvider(
+          create: (context) => CartBloc(),
+          child: const MaterialApp(
+            home: HomeScreen(),
+          ),
+        ),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Produits'), findsOneWidget);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('Aucun produit'), findsOneWidget);
+  });
+
+  testWidgets('Products Screen with error', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      RepositoryProvider(
+        create: (context) => ProductsRepository(
+          remoteDataSource: FailingRemoteDataSource(),
+        ),
+        child: BlocProvider(
+          create: (context) => CartBloc(),
+          child: const MaterialApp(
+            home: HomeScreen(),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.text('Produits'), findsOneWidget);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text(Exception('Error').toString()), findsOneWidget);
   });
 }

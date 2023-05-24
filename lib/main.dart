@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marvin_app_moc/home_screen/cart_bloc/cart_bloc.dart';
 import 'package:marvin_app_moc/home_screen/cart_screen/cart_screen.dart';
-import 'package:marvin_app_moc/home_screen/data_sources/remote_fruits_data_source.dart';
-import 'package:marvin_app_moc/home_screen/fruits_repository_provider.dart';
+import 'package:marvin_app_moc/home_screen/data_sources/api_products_data_source.dart';
 import 'package:marvin_app_moc/home_screen/home_screen.dart';
 import 'package:marvin_app_moc/home_screen/models/product.dart';
 import 'package:marvin_app_moc/home_screen/product_detail_screen/product_detail_screen.dart';
-import 'package:marvin_app_moc/home_screen/repository/fruits_repository.dart';
-
-import 'home_screen/data_sources/local_fruits_data_source.dart';
+import 'package:marvin_app_moc/home_screen/repository/products_repository.dart';
 
 void main() {
   const apiBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'coucou');
@@ -22,10 +19,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FruitsRepositoryProvider(
-      fruitsRepository: FruitsRepository(
-        localDataSource: LocalFruitsDataSource(),
-        remoteDataSource: RemoteFruitsDataSource(),
+    return RepositoryProvider(
+      create: (context) => ProductsRepository(
+        remoteDataSource: ApiProductsDataSource(),
       ),
       child: BlocProvider(
         create: (context) => CartBloc(),

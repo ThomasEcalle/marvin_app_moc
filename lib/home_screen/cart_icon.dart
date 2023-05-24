@@ -17,7 +17,6 @@ class CartIcon extends StatelessWidget {
         return nextState.status == CartStatus.updated;
       },
       builder: (context, state) {
-        debugPrint('Building cart icon');
         return GestureDetector(
           onTap: onTap,
           child: Row(

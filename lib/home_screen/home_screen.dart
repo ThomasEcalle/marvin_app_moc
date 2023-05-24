@@ -5,6 +5,7 @@ import 'package:marvin_app_moc/home_screen/models/product.dart';
 import 'package:marvin_app_moc/home_screen/product_detail_screen/product_detail_screen.dart';
 import 'package:marvin_app_moc/home_screen/product_item.dart';
 import 'package:marvin_app_moc/home_screen/products_bloc/products_bloc.dart';
+import 'package:marvin_app_moc/home_screen/repository/products_repository.dart';
 
 import 'cart_icon.dart';
 
@@ -14,7 +15,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductsBloc()..add(GetAllProducts(10)),
+      create: (context) => ProductsBloc(
+        repository: RepositoryProvider.of<ProductsRepository>(context),
+      )..add(GetAllProducts(10)),
       child: Builder(
         builder: (context) {
           return Scaffold(
