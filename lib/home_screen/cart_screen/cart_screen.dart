@@ -16,7 +16,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Panier d\'achats'),
+        title: const Text('Panier d\'achats'),
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
